@@ -147,4 +147,3 @@ ${filterString}`;
             return `You are a helpful assistant. Please analyze the provided text.`;
     }
 }
-
