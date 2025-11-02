@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Resume Analyzer</title>
+    
+    <!-- === NEW SEO TAGS START === -->
+    <title>AI Resume Analyzer & Job Assistant | Get Free Resume Critique</title>
+    <meta name="description" content="Get instant, free analysis of your resume with AI. Paste your resume to get a professional critique, find relevant job postings, and discover networking contacts.">
+    <meta name="keywords" content="ai resume analyzer, free resume critique, resume help, job finder, ai job assistant, resume checker, career tools">
+    <!-- === NEW SEO TAGS END === -->
+    
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Load Inter font from Google Fonts -->
@@ -338,13 +344,14 @@
                     });
 
                     if (!response.ok) {
-                        // Read the error body ONCE as JSON
+                        // Read the error body ONCE
                         let errorText = "Failed with status: " + response.status;
                         try {
+                            // Try to read as JSON
                             const errorBody = await response.json();
                             errorText = errorBody.error || errorBody.message || JSON.stringify(errorBody);
                         } catch (e) {
-                            // If the error body isn't JSON, read it as text
+                            // If it's not JSON, read it as text
                             errorText = await response.text();
                         }
                         throw new Error(errorText);
@@ -439,3 +446,5 @@
     </script>
 </body>
 </html>
+
+
