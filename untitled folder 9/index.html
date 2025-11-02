@@ -308,8 +308,9 @@
                     outputElementCard.classList.remove('hidden');
                     resultsContainer.classList.remove('hidden');
 
+                // This is the corrected 'catch' block
                 } catch (error) { 
-                    console.error(error);
+                    console.error("Error in handleAnalysis:", error);
                     displayError(error.message || "An unknown error occurred.");
                 } finally {
                     displayLoading(false);
@@ -317,11 +318,11 @@
             }
 
             /**
-             * Calls our secure VERCEL serverless function
+             * Calls our secure serverless function and only reads the response ONCE.
              */
             async function callServerlessFunction(resumeText, analysisType, location, datePosted) {
-                // *** THIS IS THE IMPORTANT CHANGE FOR VERCEL ***
-                // It must call /api/getAnalysis
+                // This path MUST match our function location: /functions/api/getAnalysis.js
+                // Cloudflare turns that into the URL: /api/getAnalysis
                 const functionUrl = '/api/getAnalysis'; 
 
                 try {
@@ -338,14 +339,15 @@
 
                     if (!response.ok) {
                         // Read the error body ONCE as JSON
-                        let errorBody;
+                        let errorText = "Failed with status: " + response.status;
                         try {
-                            errorBody = await response.json();
+                            const errorBody = await response.json();
+                            errorText = errorBody.error || errorBody.message || JSON.stringify(errorBody);
                         } catch (e) {
-                            // If the body isn't JSON, use the status text
-                            throw new Error(response.statusText || `Serverless function failed with status ${response.status}`);
+                            // If the error body isn't JSON, read it as text
+                            errorText = await response.text();
                         }
-                        throw new Error(errorBody.error || `Serverless function failed with status ${response.status}`);
+                        throw new Error(errorText);
                     }
 
                     // Read the success body ONCE as JSON
@@ -437,4 +439,3 @@
     </script>
 </body>
 </html>
-
